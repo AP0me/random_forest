@@ -1,0 +1,357 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\includegraphics[width=3.2224in,height=0.95864in]{media/media/image2.png}\includegraphics[width=2.41302in,height=1.04313in]{media/media/image17.png}
+
+\textbf{Wine Quality Analysis using Random Forest Classifier}
+
+\emph{Group :} CS - 20
+
+\emph{Team members :} Abdullazada Anar, Abdulkhaligov Habil, Khidilov
+Turan
+
+\emph{Teacher :} Pierre Collet
+
+\emph{\textbf{Date : 24.03.2024}}
+
+\emph{\textbf{Table of Contents}}
+
+Introduction
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots.3
+
+Data Description
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots.3
+
+Exploratory Data Analysis (EDA)
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots.3
+
+Redundant
+Features\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots.\ldots\ldots\ldots\ldots\ldots..6
+
+Preprocessing
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots6
+
+Model Development
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots.7
+
+Feature Importance
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots..9
+
+Confidence of Predictions
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots9
+
+Conclusion
+\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots10
+
+\emph{\textbf{Introduction}}
+
+The quality of wine is influenced by its chemical composition, with
+alcohol content being the main contributor to the quality. Historically,
+alcohol content has been an important indicator of wine quality, often
+related with the body of the wine. However, in this project, we will try
+to use other features which might help to predict wine quality. Using
+the Wine quality dataset which excludes information on alcohol content,
+we will implement Random Forest model in order to reveal importance of
+different features in predicting wine quality and to assess the model's
+performance in the absence of alcohol content.
+
+Random Forest algorithm is a type of ensemble learning method which is
+made up of a collection of decision trees. While decision trees are
+common machine learning algorithms, they can lead to some problems such
+as bias and overfitting. However, in contrast, when several decision
+trees form an ensemble in the random forest, they show better
+performance since it aggregates results of decision trees.
+
+\emph{\textbf{Data Description}}
+
+The dataset contains 6497 samples of red and white wine with 12
+features, including fixed acidity, volatile acidity, residual
+sugar,density and others. Target variable is `quality' column which
+contains classes ranging from 3 to 10 representing the quality of red
+and white wine.
+
+\emph{\textbf{Exploratory Data Analysis}}
+
+First of all, we checked whether the dataset contains missing values or
+not. Since we know, Decision Tree based model can't work with null
+values.Fortunately, there were no null values in the dataset, so there
+was no need to handle them. Additionally, the dataset contains 1191
+duplicated rows which were removed in order to prevent future problems
+in the model performance.
+
+\begin{quote}
+\includegraphics[width=2.33336in,height=2.02604in]{media/media/image18.png}
+
+On the picture left, we are able to see count of each class in the
+target column. We can clearly notice that there is a strict imbalance
+containing mainly `5' and `6' classes. We will solve this problem in the
+further steps using regrouping and SMOTE algorithm.
+\end{quote}
+
+By looking at the relationship between some of the features and target,
+we can have an intuition about correlation. For instance, Figure 2 shows
+negative correlation between `volatile acidity' and `quality' (higher
+the acidity, lower the quality). As well as according to the Figure 1,
+we are able to see higher density area which indicates more common
+combinations of volatile and citric acid for the wines.
+
+\includegraphics[width=3.52604in,height=2.60417in]{media/media/image8.png}\includegraphics[width=2.53745in,height=2.3562in]{media/media/image4.png}
+
+\emph{Figure 1} \emph{Figure 2}
+
+\emph{.}
+
+\includegraphics[width=4.23438in,height=4.01042in]{media/media/image15.png}
+
+\emph{Figure 3}
+
+On the other hand, it is also possible to see the correlation without
+plotting the graph of each feature versus target individually. For this
+reason, we can use heatmap (Figure 3) which refers to a correlation
+matrix.
+
+\includegraphics[width=3.10938in,height=1.46202in]{media/media/image12.png}\includegraphics[width=3.04955in,height=1.46868in]{media/media/image19.png}
+
+\emph{Figure 4} \emph{Figure 5}
+
+Before starting building the model, it is a good idea to get familiar
+with the distribution and outlier condition of the dataset. In Figure 4,
+we can see the distribution of some columns which correspond to the
+right or positively skewed distribution. It means that most observations
+are gathered around lower values but there are few higher values which
+stretch the tail of the distribution to the right. We can confirm it by
+looking at the outliers of these columns where outliers on the right
+tail force the mean to be higher than median (Figure 5).
+
+Since Random forest is resistant to outliers and distribution, we won't
+make any changes.
+
+\emph{\textbf{Redundant Features}}
+
+\includegraphics[width=4.66667in,height=2.39089in]{media/media/image7.png}
+
+\emph{Figure 6}
+
+We checked whether there are any redundant features using fastbook
+library.
+
+As we can see from the graph (Figure 6), there are not any features that
+are highly-correlated (very close to each-other), that's why we don't
+need to remove any of the features.
+
+\emph{\textbf{Preprocessing}}
+
+Last step before model development is preprocessing which makes the data
+ready for the model. Preprocessing consists of several steps that help
+to improve the quality of the data and make it easier to work with.
+
+Our target feature contains 7 classes, some of them having very high or
+low number of observations which make the dataset imbalanced. Since the
+model will struggle with predicting classes with few samples, firstly we
+regrouped classes into 3 groups so that 0 corresponds to low, 1
+corresponds to medium and 2 refers to high quality wines. We ended up
+with number of classes as shown below :
+
+\includegraphics[width=2.45833in,height=0.77083in]{media/media/image16.png}
+
+However, as we see, even if we managed to decrease the number of
+classes, we still have imbalance issues. For handling this, we applied
+the SMOTE oversampling technique to increase the number of minority
+classes up to the number of majority classes. We applied this method to
+only training data where we obtained from train\_test\_split. After the
+process, we had appropriate balanced dataset :
+
+\emph{\textbf{Model Development}}
+
+In this project, we are going to use Random Forest Classifier due to its
+several advantages such as robustness to outliers, reduced risk of
+overfitting, performance in multilabel classification problems etc. We
+quickly started the process by building a simple model to evaluate
+overall performance.
+
+\includegraphics[width=3.08854in,height=1.82292in]{media/media/image9.png}\includegraphics[width=3.07813in,height=1.80208in]{media/media/image3.png}
+
+\emph{Figure 7 Figure 8}
+
+Figure 7 and 8 shows the performance of the model. Even though results
+are pretty high on the training dataset with 100\% results, accuracy
+score on test data is relatively low with 87\%. We can conclude that we
+have an overfitting problem. For this reason, we used hyperparameter
+tuning to optimise our model with best parameters.
+
+\includegraphics[width=3.01042in,height=1.16667in]{media/media/image20.png}\includegraphics[width=2.17188in,height=1.15625in]{media/media/image1.png}
+
+\emph{Figure 9 Figure 10}
+
+Using some selected parameters shown in Figure 9, we used
+RandomizedSearchCV for tuning. After the tuning process, we obtained the
+best parameters (Figure 10) and applied it to our model for secondary
+evaluation. In order to clearly understand the performance of the model
+on train and test data, we plotted the learning curve based on increased
+training set
+
+size.
+
+\includegraphics[width=3.08854in,height=2.11369in]{media/media/image14.png}
+
+\emph{Figure 11}
+
+According to Figure 11, we observe a huge consistent gap between train
+and validation accuracy as the training set size increases. Training
+accuracy is significantly higher than its validation accuracy. This gap
+shows that the model is overfitting to the training data. This is the
+consequence of a very complex model presented by hyperparameter tuning.
+To solve this problem, we made some manual tuning to reach proper
+values.
+
+\includegraphics[width=3.06771in,height=2.08666in]{media/media/image21.png}
+
+\emph{Figure 12}
+
+As it is shown on Figure 12, after the manual tuning process, we managed
+to optimise our model with relevant parameters. Consequently, we reached
+approximately 92\% accuracy on validation data. In order to make sure
+about accuracy we performed 5 fold cross-validation on test data.
+
+\includegraphics[width=6.26772in,height=0.36111in]{media/media/image5.png}
+
+\emph{\textbf{Feature Importance}}
+
+\includegraphics[width=4.39063in,height=2.56567in]{media/media/image10.png}
+
+\emph{Figure 13}
+
+We obtained the graph (Figure 13) indicating the contribution of each
+feature to the model by using `feature\_importances\_' function which is
+available for tree-based models. We can generally see that `free sulfur
+dioxide' and `total sulfur dioxide' are the most important features.
+Besides, we don't have any features has importance close to zero. That's
+why we don't need to remove any of them.
+
+\includegraphics[width=2.22917in,height=1.25in]{media/media/image13.png}
+\includegraphics[width=2.15625in,height=1.19792in]{media/media/image11.png}
+
+\emph{Volatile acidity} \emph{Free sulfur dioxide}
+
+\emph{Figure 14 Figure 15}
+
+We can also understand the effect of each feature on predictions by
+using \emph{partial dependence plots} (PDPs). Figure 14 and Figure 15
+shows how volatile acidity and free sulfur dioxide features affect
+prediction of quality (target) feature. As volatile acidity drops, wine
+quality also decreases, however, wine quality increases with the rise of
+free sulfur dioxide up to 30, but after this point, it remains nearly
+constant.
+
+\emph{\textbf{Confidence of Predictions}}
+
+After making predictions, we can also assess how confident each
+prediction is. For that, we can use predict\_proba function which gives
+probabilities calculated for each class by model.
+
+\includegraphics[width=2.92188in,height=0.5952in]{media/media/image6.png}
+
+\emph{Figure 16}
+
+For example, for one wine sample taken from test data, we calculated
+probabilities for each class (Figure 16). Since probability for class 1
+is the highest with 90\%, we conclude that this wine corresponds to
+class 1 which is medium quality.
+
+\emph{\textbf{Conclusion}}
+
+In conclusion, this project aims to interpret and understand
+capabilities of Random Forest Classifier on Wine quality dataset. Random
+Forest showed high level performance even in the absence of alcohol
+content. Model was able to differentiate different quality levels using
+other features. Total sulfur dioxide and free sulfur dioxide are two
+most important factors in predicting wine quality.
+
+Regardless of initial problems related with overfitting, parameter
+tuning efforts helped to get a well-balanced model with strong
+generalisation abilities. Model reached 92\% accuracy on test data
+obtained from cross-validation.
+
+Even though data was suffering from imbalance, this problem was solved
+using the SMOTE over-sampling algorithm which in turn contributed to
+high level accuracy.
+
+Lastly, Random Forest Classifier is a good ensemble model which is
+appropriate for working with multiclass problems showing high accuracy
+as it combines results of decision trees, thus not affected by outliers
+and distribution of features.
+
+\section{References}
+
+\url{https://towardsdatascience.com/interpreting-random-forests-638bca8b49ea}
+
+\url{https://medium.com/@brijesh_soni/why-random-forests-outperform-decision-trees-a-powerful-tool-for-complex-data-analysis-47f96d9062e7}
+
+\url{https://www.ibm.com/topics/random-forest}
+
+
+\end{document}
